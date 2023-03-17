@@ -3,6 +3,7 @@
 # except these:
 !.gitignore
 !.bashrc
+!.Xresources
 !.config/
 !.config/i3
 !.config/i3/*
