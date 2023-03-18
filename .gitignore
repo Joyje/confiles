@@ -12,9 +12,13 @@
 !.config/
 
 # for i3
-!.config/i3
+!.config/i3/
 !.config/i3/*
 
 # for lf
 !.config/lf/
 !.config/lf/*
+
+# for ctpv
+!.config/ctpv/
+!.config/ctpv/*

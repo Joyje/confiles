@@ -51,7 +51,3 @@ URxvt.pasteCommand: xclip -o -selection clipboard
 URxvt.urlLauncher: brave-browser
 URxvt.underlineURLs: true
 URxvt.urlButton: 1
-
-!! Support displaying images directly in terminal
-URxvt*perl-ext-common: default,matcher
-URxvt*perl-ext: default,matcher

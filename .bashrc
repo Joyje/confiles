@@ -16,6 +16,5 @@ alias ls='clear; pwd -P; (ls -AF | grep -v / | wc -l; echo "files,";) | tr "\n" 
 # alias mv='mv -i'
 
 # Program specific aliases
-alias lf='~/.config/lf/lfuz'
 alias brave-browser='brave-browser --no-sandbox'
 alias pgadmin='/usr/pgadmin4/bin/pgadmin4'

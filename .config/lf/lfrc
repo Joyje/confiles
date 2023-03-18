@@ -16,8 +16,10 @@ cmd on-cd &{{
 }}
 on-cd
 set number on
-set cleaner '~/.config/lf/lfc'
-set previewer '~/.config/lf/LFscope'
+set previewer ctpv
+set cleaner ctpvclear
+&ctpv -s $id
+&ctpvquit $id
 
 ##########################################################################################
 # __  __                 ___   ____       _           _   
