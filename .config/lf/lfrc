@@ -1,0 +1,138 @@
+# _     _____   ____               ____                                          _     
+#| |   |  ___| |  _ \ _   _ _ __  / ___|___  _ __ ___  _ __ ___   __ _ _ __   __| |___ 
+#| |   | |_    | |_) | | | | '_ \| |   / _ \| '_ ` _ \| '_ ` _ \ / _` | '_ \ / _` / __|
+#| |___|  _|   |  _ <| |_| | | | | |__| (_) | | | | | | | | | | | (_| | | | | (_| \__ \
+#|_____|_|     |_| \_\\__,_|_| |_|\____\___/|_| |_| |_|_| |_| |_|\__,_|_| |_|\__,_|___/
+##########################################################################################
+##########################################################################################
+# ____       _   _   _                 
+#/ ___|  ___| |_| |_(_)_ __   __ _ ___ 
+#\___ \ / _ \ __| __| | '_ \ / _` / __|
+# ___) |  __/ |_| |_| | | | | (_| \__ \
+#|____/ \___|\__|\__|_|_| |_|\__, |___/
+#                            |___/     
+cmd on-cd &{{
+    printf "\033]0; $PWD\007" > /dev/tty
+}}
+on-cd
+set number on
+set cleaner '~/.config/lf/lfc'
+set previewer '~/.config/lf/LFscope'
+
+##########################################################################################
+# __  __                 ___   ____       _           _   
+#|  \/  | _____   _____ ( _ ) / ___|  ___| | ___  ___| |_ 
+#| |\/| |/ _ \ \ / / _ \/ _ \/\___ \ / _ \ |/ _ \/ __| __|
+#| |  | | (_) \ V /  __/ (_>  <___) |  __/ |  __/ (__| |_ 
+#|_|  |_|\___/ \_/ \___|\___/\/____/ \___|_|\___|\___|\__|
+#
+cmd select-all %{{
+    if [ "$lf_hidden" = "false" ]; then fdfind -L -d 1
+    else fdfind -HL -d 1
+    fi |
+    xargs -d '\n' -r -I{} lf -remote "send $id toggle {}"
+}}
+cmd select-type %{{
+    if [ "$lf_hidden" = "false" ]; then fdfind -L -d 1 -t d
+    else fdfind -HL -d 1 -t d
+    fi | sed '/^$/d' | sort | uniq -u |
+    xargs -d '\n' -r -I{} lf -remote "send $id toggle {}"
+}}
+cmd newtypestart select $latestdir
+cmd newtypeend select $latestdir
+
+##########################################################################################
+# __  __       _         ___   ____       _      _       
+#|  \/  | __ _| | _____ ( _ ) |  _ \  ___| | ___| |_ ___ 
+#| |\/| |/ _` | |/ / _ \/ _ \/\ | | |/ _ \ |/ _ \ __/ _ \
+#| |  | | (_| |   <  __/ (_>  < |_| |  __/ |  __/ ||  __/
+#|_|  |_|\__,_|_|\_\___|\___/\/____/ \___|_|\___|\__\___|
+#
+cmd mkparentdir %{{
+    printf "Name New Parent Directory: "
+    read latestdir
+    mkdir -p ../$latestdir
+    lf -remote "send $id cd ../$latestdir"
+}}
+cmd mksubdir %{{
+    printf "Name New Subdirectory: "
+    read latestdir
+    mkdir -p "$latestdir"
+    lf -remote "send $id cd $latestdir"
+}}
+cmd touch %{{
+    printf "Name New File: "
+    read latestfile
+    touch $latestfile 
+}}
+
+##########################################################################################
+# _____    _ _ _   ___   ____                                 
+#| ____|__| (_) |_( _ ) |  _ \ ___ _ __   __ _ _ __ ___   ___ 
+#|  _| / _` | | __/ _ \/\ |_) / _ \ '_ \ / _` | '_ ` _ \ / _ \
+#| |__| (_| | | || (_>  <  _ <  __/ | | | (_| | | | | | |  __/
+#|_____\__,_|_|\__\___/\/_| \_\___|_| |_|\__,_|_| |_| |_|\___|
+#                                                             
+cmd edit $$EDITOR $f
+cmd bulk-rename ${{
+    old="$(mktemp)"
+    new="$(mktemp)"
+    if [ -n "$fs" ]; then
+        fs="$(basename -a $fs)"
+    else
+        fs="$(ls)"
+    fi
+    printf '%s\n' "$fs" >"$old"
+    printf '%s\n' "$fs" >"$new"
+    $EDITOR "$new"
+    [ "$(wc -l < "$new")" -ne "$(wc -l < "$old")" ] && exit 
+    paste "$old" "$new" | while IFS= read -r names; do
+        src="$(printf '%s' "$names" | cut -f1)"
+        dst="$(printf '%s' "$names" | cut -f2)"
+        if [ "$src" = "$sdt" ] || [ -e "$dst" ]; then
+            continue
+        fi
+        mv -- "$src" "$dst"
+    done
+    rm -- "$old" "$new"
+    lf -remote "send $id unselect"
+}}
+
+##########################################################################################
+# _  __          __  __                   _             
+#| |/ /___ _   _|  \/  | __ _ _ __  _ __ (_)_ __   __ _ 
+#| ' // _ \ | | | |\/| |/ _` | '_ \| '_ \| | '_ \ / _` |
+#| . \  __/ |_| | |  | | (_| | |_) | |_) | | | | | (_| |
+#|_|\_\___|\__, |_|  |_|\__,_| .__/| .__/|_|_| |_|\__, |
+#          |___/             |_|   |_|            |___/ 
+map . set hidden!
+map b echo $fs
+map c
+map cb :select-type; bulk-rename
+map cc :select-all; bulk-rename
+map ce :select-type; bulk-rename
+map cl rename
+map cw :select-type; bulk-rename
+map d
+map db :select-type; cut
+map dd :select-all; cut
+map de :select-type; cut
+map dl cut
+map dw :select-type; cut
+map e newtypeend
+map i touch
+map O mkparentdir
+map o mksubdir
+map r
+map u :{{
+    clear
+    unselect
+}}
+map w newtypestart
+map x delete
+map y
+map yb :select-type; copy
+map ye :select-type; copy
+map yl copy
+map yw :select-type; copy
+map yy :select-all; copy

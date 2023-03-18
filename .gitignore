@@ -1,9 +1,20 @@
 # Ignore all files
 *
-# except these:
+# except these listed below
+# for git repo
 !.gitignore
+
+# for terminal
 !.bashrc
 !.Xresources
+
+# for directory tree structure
 !.config/
+
+# for i3
 !.config/i3
 !.config/i3/*
+
+# for lf
+!.config/lf/
+!.config/lf/*
