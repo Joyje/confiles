@@ -13,6 +13,7 @@
 #                            |___/     
 cmd on-cd &{{
     printf "\033]0; $PWD\007" > /dev/tty
+    tmux send-keys -t 1 "cd $PWD && ls" Enter
 }}
 on-cd
 set number on
