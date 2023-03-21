@@ -199,4 +199,4 @@ assign [class="(?i)brave-browser"] $ws2
 # autostart programs in dedicated containers
 exec i3-msg 'exec i3-sensible-terminal -name Overview -e htop'
 exec i3-msg 'exec i3-sensible-terminal -name Head -e lf'
-exec i3-msg 'exec i3-sensible-terminal -name Main -e tmux add-session -s lf'
+exec i3-msg 'exec i3-sensible-terminal -name Main -e tmux'
