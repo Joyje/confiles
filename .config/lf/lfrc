@@ -13,9 +13,9 @@
 #                            |___/     
 cmd on-cd &{{
     printf "\033]0; $PWD\007" > /dev/tty
-    tmux send-keys -t 0 "cd $PWD && ls" Enter
 }}
 on-cd
+set filesep " "
 set number on
 set previewer ctpv
 set cleaner ctpvclear
@@ -54,19 +54,22 @@ cmd newtypeend select $latestdir
 cmd mkparentdir %{{
     printf "Name New Parent Directory: "
     read latestdir
-    mkdir -p ../$latestdir
-    lf -remote "send $id cd ../$latestdir"
+    mkdir -p ../${latestdir}
+    #mkdir -p $(seq -f "../${latestdir}%g" <arg>)
+    #lf -remote "send $id cd ../${latestdir}"
 }}
 cmd mksubdir %{{
     printf "Name New Subdirectory: "
     read latestdir
-    mkdir -p "$latestdir"
-    lf -remote "send $id cd $latestdir"
+    mkdir -p ${latestdir}
+    #mkdir -p $(seq -f "${latestdir}%g" <arg>)
+    #lf -remote "send $id cd ${latestdir}"
 }}
-cmd touch %{{
-    printf "Name New File: "
-    read latestfile
-    touch $latestfile 
+cmd newfile %{{
+    printf "Name new file(s): "
+    read newfilename
+    touch ${newfilename}
+    #touch $(seq -f "${newfilename}%g" <arg>)
 }}
 
 ##########################################################################################
@@ -76,7 +79,24 @@ cmd touch %{{
 #| |__| (_| | | || (_>  <  _ <  __/ | | | (_| | | | | | |  __/
 #|_____\__,_|_|\__\___/\/_| \_\___|_| |_|\__,_|_| |_| |_|\___|
 #                                                             
-cmd edit $$EDITOR $f
+cmd edit &{{
+    tmux send-keys -t 0 Escape ":argd * | tabd | argadd" Enter ":argadd $fx | tab all" Enter
+}}
+cmd append %{{
+    printf "Append to selected file(s): "
+    read appendage
+    for file in $fx; do
+        echo ${appendage} >> $file
+    done
+}}
+cmd appendnew %{{
+    printf "Append to new file(s): "
+    read appendage
+    printf "Name file(s): "
+    read newfilename
+    touch ${newfilename}
+    echo ${appendage} >> ${newfilename}
+}}
 cmd bulk-rename ${{
     old="$(mktemp)"
     new="$(mktemp)"
@@ -108,34 +128,31 @@ cmd bulk-rename ${{
 #| . \  __/ |_| | |  | | (_| | |_) | |_) | | | | | (_| |
 #|_|\_\___|\__, |_|  |_|\__,_| .__/| .__/|_|_| |_|\__, |
 #          |___/             |_|   |_|            |___/ 
+map [
+map ]
+map ^ jump-firstfile
+map <c-i> jump-next
+map <c-o> jump-prev
 map . set hidden!
-map b echo $fs
+map a append
+map A appendnew
+map b jump-startprevioustype
+map B jump-startprevioustype
 map c
-map cb :select-type; bulk-rename
-map cc :select-all; bulk-rename
-map ce :select-type; bulk-rename
-map cl rename
-map cw :select-type; bulk-rename
-map d
-map db :select-type; cut
-map dd :select-all; cut
-map de :select-type; cut
-map dl cut
-map dw :select-type; cut
-map e newtypeend
-map i touch
+map e jump-endnexttype
+map E jump-endnexttype
+map gg
+map gg cd /
+map G
+map G cd
+map i edit
+map I newfile
 map O mkparentdir
 map o mksubdir
-map r
 map u :{{
     clear
     unselect
 }}
-map w newtypestart
+map w jump-startnexttype
+map W jump-startnexttype
 map x delete
-map y
-map yb :select-type; copy
-map ye :select-type; copy
-map yl copy
-map yw :select-type; copy
-map yy :select-all; copy

@@ -7,6 +7,7 @@
 # for terminal
 !.bashrc
 !.Xresources
+!.vimrc
 
 # for directory tree structure
 !.config/
