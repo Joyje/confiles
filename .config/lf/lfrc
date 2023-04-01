@@ -16,7 +16,7 @@ cmd on-cd &{{
 }}
 on-cd
 set filesep " "
-set number on
+set number 'true'
 set previewer ctpv
 set cleaner ctpvclear
 &ctpv -s $id
@@ -54,22 +54,37 @@ cmd newtypeend select $latestdir
 cmd mkparentdir %{{
     printf "Name New Parent Directory: "
     read latestdir
-    mkdir -p ../${latestdir}
-    #mkdir -p $(seq -f "../${latestdir}%g" <arg>)
+    if [ $lf_count -gt 1 ]; then
+        for dir in ${latestdir}; do
+            mkdir -p $(seq -f "../${dir}%g" ${lf_count})
+        done
+    else
+        mkdir -p ../${latestdir}
+    fi
     #lf -remote "send $id cd ../${latestdir}"
 }}
 cmd mksubdir %{{
     printf "Name New Subdirectory: "
     read latestdir
-    mkdir -p ${latestdir}
-    #mkdir -p $(seq -f "${latestdir}%g" <arg>)
+    if [ $lf_count -gt 1 ]; then
+        for dir in ${latestdir}; do
+            mkdir -p $(seq -f "${dir}%g" ${lf_count})
+        done
+    else
+        mkdir -p ${latestdir}
+    fi
     #lf -remote "send $id cd ${latestdir}"
 }}
 cmd newfile %{{
     printf "Name new file(s): "
     read newfilename
-    touch ${newfilename}
-    #touch $(seq -f "${newfilename}%g" <arg>)
+    if [ $lf_count -gt 1 ]; then
+        for file in ${newfilename}; do
+            touch $(seq -f "${file}%g" ${lf_count})
+        done
+    else
+        touch ${newfilename}
+    fi
 }}
 
 ##########################################################################################
@@ -86,7 +101,9 @@ cmd append %{{
     printf "Append to selected file(s): "
     read appendage
     for file in $fx; do
-        echo ${appendage} >> $file
+        for i in `seq $lf_count`; do
+            echo ${appendage} >> ${file}
+        done
     done
 }}
 cmd appendnew %{{
@@ -95,7 +112,11 @@ cmd appendnew %{{
     printf "Name file(s): "
     read newfilename
     touch ${newfilename}
-    echo ${appendage} >> ${newfilename}
+    for file in ${newfilename}; do
+        for i in `seq $lf_count`; do
+            echo ${appendage} >> ${file}
+        done
+    done
 }}
 cmd bulk-rename ${{
     old="$(mktemp)"
