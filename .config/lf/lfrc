@@ -12,6 +12,10 @@
 # ___) |  __/ |_| |_| | | | | (_| \__ \
 #|____/ \___|\__|\__|_|_| |_|\__, |___/
 #                            |___/     
+cmd on-start &{{
+	rclone mount GoogleDrive: ~/GDrive/
+}}
+on-start
 cmd on-cd &{{
     printf "\033]0; $PWD\007" > /dev/tty
 }}
@@ -31,11 +35,10 @@ set cleaner ctpvclear
 #| |  | | (_) \ V /  __/ (_>  <___) |  __/ |  __/ (__| |_ 
 #|_|  |_|\___/ \_/ \___|\___/\/____/ \___|_|\___|\___|\__|
 #
-cmd copy-find %{{
+cmd select-path ${{
     printf "Select path: "
     read -e spath
-    ${ps}
-    lf -remote "send $id toggle ${spath}"
+    lf -remote "send $id toggle $spath"
     lf -remote "send $id copy"
 }}
 cmd select-all %{{
@@ -50,8 +53,8 @@ cmd select-type %{{
     fi | sed '/^$/d' | sort | uniq -u |
     xargs -d '\n' -r -I{} lf -remote "send $id toggle {}"
 }}
-cmd newtypestart select $latestdir
-cmd newtypeend select $latestdir
+#cmd newtypestart select $latestdir
+#cmd newtypeend select $latestdir
 
 ##########################################################################################
 # __  __       _         ___   ____       _      _       
@@ -183,7 +186,8 @@ map u :{{
 }}
 map w jump-startnexttype
 map W jump-startnexttype
-map x delete
+map x delete 
 map y
+map yy select-all
 map yl copy
-map y/ copy-find
+map y/ select-path
