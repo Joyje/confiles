@@ -48,14 +48,6 @@ else fdfind -HL $(pwd) -d 1
     sed '/^$/d' | sort | uniq -u |
     xargs -d '\n' -r -I{} lf -remote "send $id toggle {}"
 }}
-cmd copy-all %{{
-    find ~+ -maxdepth 1 | sed '1s/.*/copy/' > ~/.local/share/lf/files
-    lf -remote "send $id sync"
-}}
-cmd move-all %{{
-    find ~+ -maxdepth 1 | sed '1s/.*/move/' > ~/.local/share/lf/files
-    lf -remote "send $id sync"
-}}
 cmd select-files ${{
     { echo "$fs"; find -L "$(pwd)" -mindepth 1 -maxdepth 1 -type f; } |
         if [ "$lf_hidden" = "false" ]; then
@@ -189,6 +181,13 @@ map A appendnew
 map b jump-startprevioustype
 map B jump-startprevioustype
 map c
+map d
+map dd move-all %{{
+    find ~+ -maxdepth 1 | sed '1s/.*/move/' > ~/.local/share/lf/files
+    lf -remote "send $id sync"
+}}
+map dl cut
+map d/ select-path
 map e jump-endnexttype
 map E jump-endnexttype
 map gg
@@ -208,6 +207,9 @@ map w jump-startnexttype
 map W jump-startnexttype
 map x delete 
 map y
-map yy copy-all
+map yy copy-all %{{
+    find ~+ -maxdepth 1 | sed '1s/.*/copy/' > ~/.local/share/lf/files
+    lf -remote "send $id sync"
+}}
 map yl copy
 map y/ select-path
