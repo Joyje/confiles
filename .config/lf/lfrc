@@ -35,11 +35,17 @@ set cleaner ctpvclear
 #| |  | | (_) \ V /  __/ (_>  <___) |  __/ |  __/ (__| |_ 
 #|_|  |_|\___/ \_/ \___|\___/\/____/ \___|_|\___|\___|\__|
 #
-cmd select-path ${{
+cmd copy-path ${{
     printf "Select path: "
     read -e spath
     lf -remote "send $id toggle $spath"
     lf -remote "send $id copy"
+}}
+cmd move-path ${{
+    printf "Select path: "
+    read -e spath
+    lf -remote "send $id toggle $spath"
+    lf -remote "send $id cut"
 }}
 cmd select-all %{{
 if [ "$lf_hidden" = "false" ]; then fdfind -L $(pwd) -d 1
@@ -181,24 +187,27 @@ map A appendnew
 map b jump-startprevioustype
 map B jump-startprevioustype
 map c
+map cc
+map cl
+map c/
 map d
-map dd move-all %{{
+map dd %{{
     find ~+ -maxdepth 1 | sed '1s/.*/move/' > ~/.local/share/lf/files
     lf -remote "send $id sync"
 }}
 map dl cut
-map d/ select-path
+map d/ move-path
 map e jump-endnexttype
 map E jump-endnexttype
 map gg
 map gg cd /
-map gt ${{tmux send-keys -t 0 "cd $PWD && ls" Enter}}
+map gt cd
 map G
-map G cd
-map i ${{tmux send-keys -t 1 Escape ":argd * | tabd | argadd" Enter ":argadd $fx | tab all" Enter}}
+map i ${{tmux send-keys -t 0 "cd $PWD && ls" Enter}}
 map I newfile
 map O mkparentdir
 map o mksubdir
+map s ${{tmux send-keys -t 1 Escape ":argd * | tabd | argadd" Enter ":argadd $fx | tab all" Enter}}
 map u :{{
     clear
     unselect
@@ -207,9 +216,9 @@ map w jump-startnexttype
 map W jump-startnexttype
 map x delete 
 map y
-map yy copy-all %{{
+map yy %{{
     find ~+ -maxdepth 1 | sed '1s/.*/copy/' > ~/.local/share/lf/files
     lf -remote "send $id sync"
 }}
 map yl copy
-map y/ select-path
+map y/ copy-path
