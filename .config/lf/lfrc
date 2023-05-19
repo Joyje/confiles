@@ -203,11 +203,11 @@ map gg
 map gg cd /
 map gt cd
 map G
-map i ${{tmux send-keys -t 0 "cd $PWD && ls" Enter}}
+map i ${{tmux send-keys -t 0:0.1 "cd $PWD && ls" Enter}}
 map I newfile
 map O mkparentdir
 map o mksubdir
-map s ${{tmux send-keys -t 1 Escape ":argd * | tabd | argadd" Enter ":argadd $fx | tab all" Enter}}
+map s ${{tmux send-keys -t 0:0.2 Escape ":argd * | tabd | argadd" Enter ":argadd $fx | tab all" Enter}}
 map u :{{
     clear
     unselect

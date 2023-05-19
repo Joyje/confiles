@@ -1,5 +1,6 @@
 # Ignore all files
 *
+
 # except these listed below
 # for git repo
 !.gitignore
@@ -11,6 +12,10 @@
 # for directory tree structure
 !.config/
 
+# for ctpv
+!.config/ctpv/
+!.config/ctpv/*
+
 # for i3
 !.config/i3/
 !.config/i3/*
@@ -19,10 +24,10 @@
 !.config/lf/
 !.config/lf/*
 
-# for ctpv
-!.config/ctpv/
-!.config/ctpv/*
-
 # for neovim
 !.config/nvim/
 !.config/nvim/*
+
+# for tmux
+!.config/tmux/
+!.config/tmux/*
