@@ -51,3 +51,8 @@ URxvt.pasteCommand: xclip -o -selection clipboard
 URxvt.urlLauncher: brave-browser
 URxvt.underlineURLs: true
 URxvt.urlButton: 1
+
+Zutty.shell: bash
+Zutty.bg: #111
+Zutty.border: 0
+Zutty.fontsize: 10

@@ -178,7 +178,7 @@ cmd bulk-rename ${{
 #          |___/             |_|   |_|            |___/ 
 map [
 map ]
-map ^ jump-firstfile
+map ^ top
 map <c-i> jump-next
 map <c-o> jump-prev
 map . set hidden!

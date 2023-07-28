@@ -8,7 +8,8 @@
 # You may uncomment the following lines if you want `ls' to be colorized:
 export LS_OPTIONS='--color=auto --group-directories-first'
 eval "$(dircolors)"
-alias ls='clear; pwd -P; (ls -AF | grep -v / | wc -l; echo "files,";) | tr "\n" " "; ls $LS_OPTIONS -Alh'
+alias ls='clear; ls $LS_OPTIONS'
+alias ll='clear; pwd -P; (ls -AF | grep -v / | wc -l; echo "files,";) | tr "\n" " "; ls $LS_OPTIONS -Alh'
 
 # Some more alias to avoid making mistakes:
 # alias rm='rm -i'
@@ -16,5 +17,4 @@ alias ls='clear; pwd -P; (ls -AF | grep -v / | wc -l; echo "files,";) | tr "\n" 
 # alias mv='mv -i'
 
 # Program specific aliases
-alias brave-browser='brave-browser --no-sandbox'
-alias pgadmin='/usr/pgadmin4/bin/pgadmin4'
+alias column='column -ts ":"'

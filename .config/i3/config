@@ -193,7 +193,7 @@ bar {
 }
 
 # assign layouts and workspaces
-exec --no-startup-id "i3-msg 'workspace 1; append_layout /root/.config/i3/workspace-1.json'"
+exec --no-startup-id "i3-msg 'workspace 1; append_layout ~/.config/i3/workspace-1.json'"
 # assign [class="(?i)Gpicview"] path to container
 assign [class="(?i)brave-browser"] $ws2
 
