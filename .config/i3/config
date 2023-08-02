@@ -38,6 +38,50 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
+# Load all colors from .Xresources
+set_from_resource $fground foreground
+set_from_resource $bground background
+set_from_resource $cursor cursorColor
+# Black
+set_from_resource $color0 color0   # Used for text
+set_from_resource $color8 color8
+# Red
+set_from_resource $color1 color1
+set_from_resource $color9 color9
+# Green
+set_from_resource $color2 color2   # Focused boarders and passive text fields
+set_from_resource $color10 color10
+# Yellow
+set_from_resource $color3 color3   # Active/selected text fields
+set_from_resource $color11 color11
+# Blue
+set_from_resource $color4 color4
+set_from_resource $color12 color12
+# Magenta
+set_from_resource $color5 color5
+set_from_resource $color13 color13
+# Cyan
+set_from_resource $color6 color6
+set_from_resource $color14 color14
+# White
+set_from_resource $color7 color7   # Unselected tabs
+set_from_resource $color15 color15
+
+# Matching i3 colors with .Xresources colors. Don't change these unless you want
+# to missmatch i3 colors with terminal application colors. Instead change values
+# in ~/.Xresources file.
+# class:                  border:    backgr:    text:      indicator: child border:
+client.focused            $color3    $color3    $color15   $color13   $color2
+client.focused_inactive   $color2    $color7    $color0    $color13   $color2  
+client.unfocused          $color2    $color2    $color0    $color13   $color2 
+client.urgent             $color15   $color1    $color15   $color13   $color15
+client.placeholder        #000000    $color2    $color15   #000000    $color15 
+client.background                    $bground
+
+# Styling settings
+# setting:        value:
+hide_edge_borders both
+
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
@@ -50,8 +94,8 @@ bindsym $mod+Shift+period exec --no-startup-id dmenu_run
 # bindcode $mod+40 exec --no-startup-id i3-dmenu-desktop
 
 # start a terminal
-bindsym $mod+o focus parent; exec i3-sensible-terminal
-bindsym $mod+Shift+o exec i3-sensible-terminal
+bindsym $mod+shift+o focus parent; exec i3-sensible-terminal
+bindsym $mod+o exec i3-sensible-terminal
 
 # change focus
 bindsym $mod+h focus left
@@ -101,10 +145,10 @@ bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 
 # focus the parent container
-bindsym $mod+a focus parent
+bindsym $mod+shift+i focus parent
 
 # focus the child container
-#bindsym $mod+d focus child
+#bindsym $mod+a focus child
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
@@ -146,7 +190,7 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 mode "command" {
 	
 	# reload the configuration file
-	bindsym i reload
+	bindsym i exec xrdb ~/.Xresources; reload
 	
 	# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 	bindsym r restart
@@ -158,6 +202,8 @@ mode "command" {
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
+
+bindsym $mod+i mode "command"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -192,11 +238,9 @@ bar {
         status_command i3status
 }
 
-# assign layouts and workspaces
-exec --no-startup-id "i3-msg 'workspace 1; append_layout ~/.config/i3/workspace-1.json'"
-# assign [class="(?i)Gpicview"] path to container
-assign [class="(?i)brave-browser"] $ws2
+# Assign layouts and workspaces
+assign [class="sensible-browser"] $ws2
 
-# autostart programs in dedicated containers
-exec i3-sensible-terminal -name Overview -e 'htop'
-exec i3-sensible-terminal -name Main -e 'tmux'
+# Autostart programs in dedicated containers
+exec i3-sensible-terminal -e 'tmux'
+exec sensible-browser -e 'tmux'
