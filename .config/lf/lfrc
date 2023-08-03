@@ -47,23 +47,31 @@ cmd move-path ${{
     lf -remote "send $id toggle $spath"
     lf -remote "send $id cut"
 }}
-cmd select-all %{{
-if [ "$lf_hidden" = "false" ]; then fdfind -L $(pwd) -d 1
-else fdfind -HL $(pwd) -d 1
+cmd cut-all %{{
+    if [ "$lf_hidden" = "false" ]; then
+        ls | sed "s;^;$PWD/;"
+    else
+        ls -A | sed "s;^;$PWD/;"
     fi |
-    sed '/^$/d' | sort | uniq -u |
-    xargs -d '\n' -r -I{} lf -remote "send $id toggle {}"
+    sed "1imove" > ~/.local/share/lf/files
+    lf -remote "send $id sync"
+}}
+cmd copy-all %{{
+    if [ "$lf_hidden" = "false" ]; then
+        ls | sed "s;^;$PWD/;"
+    else
+        ls -A | sed "s;^;$PWD/;"
+    fi |
+    sed "1icopy" > ~/.local/share/lf/files
+    lf -remote "send $id sync"
 }}
 cmd select-files ${{
-    { echo "$fs"; find -L "$(pwd)" -mindepth 1 -maxdepth 1 -type f; } |
-        if [ "$lf_hidden" = "false" ]; then
-          # remove any hidden files so you only select files you can see.
-          grep -v '/\.[^/]\+$'
-        else
-          cat
-        fi |
-        sed '/^$/d' | sort | uniq -u |
-        xargs -d '\n' -r -I{} lf -remote "send $id toggle {}"
+    if [ "$lf_hidden" = "false" ]; then
+        ls -F | grep -v / | sed "s;^;$PWD/;"
+    else
+        ls -FA | grep -v / | sed "s;^;$PWD/;"
+    fi |
+    xargs -d '\n' -r -I{} lf -remote "send $id toggle {}"
 }}
 cmd select-type %{{
     if [ "$lf_hidden" = "false" ]; then fdfind -L -d 1 -t d
@@ -127,23 +135,32 @@ cmd newfile %{{
 cmd append %{{
     printf "Append to selected file(s): "
     read appendage
-    for file in $fx; do
-        for i in `seq $lf_count`; do
+    if [ $lf_count -gt 1 ]; then
+        for file in $fx; do
+            for i in `seq $lf_count`; do
+                echo ${appendage} >> ${file}
+            done
+        done
+    else
+        for file in $fx; do
             echo ${appendage} >> ${file}
         done
-    done
+    fi
 }}
-cmd appendnew %{{
-    printf "Append to new file(s): "
-    read appendage
-    printf "Name file(s): "
-    read newfilename
-    touch ${newfilename}
-    for file in ${newfilename}; do
-        for i in `seq $lf_count`; do
-            echo ${appendage} >> ${file}
+cmd prepend %{{
+    printf "Prepend to selected file(s): "
+    read prependage
+    if [ $lf_count -gt 1 ]; then
+        for file in $fx; do
+            for i in `seq $lf_count`; do
+                sed -i "1i${prependage}" ${file}
+            done
         done
-    done
+    else
+        for file in $fx; do
+            sed -i "1i${prependage}" ${file}
+        done
+    fi
 }}
 cmd bulk-rename ${{
     old="$(mktemp)"
@@ -183,7 +200,7 @@ map <c-i> jump-next
 map <c-o> jump-prev
 map . set hidden!
 map a append
-map A appendnew
+map A newfile
 map b jump-startprevioustype
 map B jump-startprevioustype
 map c
@@ -191,10 +208,7 @@ map cc
 map cl
 map c/
 map d
-map dd %{{
-    find ~+ -maxdepth 1 | sed '1s/.*/move/' > ~/.local/share/lf/files
-    lf -remote "send $id sync"
-}}
+map dd cut-all
 map dl cut
 map d/ move-path
 map e jump-endnexttype
@@ -203,8 +217,8 @@ map gg
 map gg cd /
 map gt cd
 map G
-map i ${{tmux send-keys -t 0:0.1 "cd $PWD && ls" Enter}}
-map I newfile
+map I ${{tmux send-keys -t 0:0.1 "cd $PWD && ls" Enter}}
+map i prepend
 map O mkparentdir
 map o mksubdir
 map s ${{tmux send-keys -t 0:0.2 Escape ":argd * | tabd | argadd" Enter ":argadd $fx | tab all" Enter}}
@@ -216,9 +230,6 @@ map w jump-startnexttype
 map W jump-startnexttype
 map x delete 
 map y
-map yy %{{
-    find ~+ -maxdepth 1 | sed '1s/.*/copy/' > ~/.local/share/lf/files
-    lf -remote "send $id sync"
-}}
+map yy copy-all
 map yl copy
 map y/ copy-path
