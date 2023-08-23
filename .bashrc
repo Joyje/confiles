@@ -18,3 +18,7 @@ alias ll='clear; pwd -P; (ls -AF | grep -v / | wc -l; echo "files,";) | tr "\n" 
 
 # Program specific aliases
 alias column='column -ts ":"'
+
+# PDF manipulation
+alias txt2pdf='_txt2pdf() { enscript -p - "$1" | ps2pdf - "$2"; }; _txt2pdf'
+alias pdfadd='_pdfadd() { gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="$3" "$1" "$2"; }; _pdfadd'
