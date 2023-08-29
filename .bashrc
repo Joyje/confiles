@@ -11,14 +11,18 @@ eval "$(dircolors)"
 alias ls='clear; ls $LS_OPTIONS'
 alias ll='clear; pwd -P; (ls -AF | grep -v / | wc -l; echo "files,";) | tr "\n" " "; ls $LS_OPTIONS -Alh'
 
+# Column options
+alias column='column -ts ":"'
+
 # Some more alias to avoid making mistakes:
 # alias rm='rm -i'
 # alias cp='cp -i'
 # alias mv='mv -i'
 
-# Program specific aliases
-alias column='column -ts ":"'
-
 # PDF manipulation
 alias txt2pdf='_txt2pdf() { enscript -p - "$1" | ps2pdf - "$2"; }; _txt2pdf'
 alias pdfadd='_pdfadd() { gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile="$3" "$1" "$2"; }; _pdfadd'
+
+# Xorg Program specific aliases
+alias brave-browser='brave-browser --allow-file-access-from-files'
+
