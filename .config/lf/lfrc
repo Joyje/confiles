@@ -199,35 +199,38 @@ map ^ top
 map <c-i> jump-next
 map <c-o> jump-prev
 map . set hidden!
-map a append
 map A newfile
-map b jump-startprevioustype
+map a append
 map B jump-startprevioustype
+map b jump-startpreviousletter
 map c
-map cc
-map cl
 map c/
+map cc ${{tmux send-keys -t 0:0.1 "cd $PWD && ls" Enter}}
+map cl ${{tmux send-keys -t 0:0.2 Escape ":argd * | tabd | argadd" Enter ":argadd $fx | tab all" Enter}}
 map d
 map dd cut-all
 map dl cut
 map d/ move-path
-map e jump-endnexttype
 map E jump-endnexttype
-map gg
+map e jump-endnextletter
+map G jump-bottomdir
+map gE jump-endprevioustype
+map ge jump-endpreviousletter
 map gg cd /
-map gt cd
-map G
-map I ${{tmux send-keys -t 0:0.1 "cd $PWD && ls" Enter}}
+map gT jump-previoussaveddir
+map gt jump-nextsaveddir
+map I newfile
 map i prepend
 map O mkparentdir
 map o mksubdir
+map S ${{tmux send-keys -t 0:0.1 "cd $PWD && ls" Enter}}
 map s ${{tmux send-keys -t 0:0.2 Escape ":argd * | tabd | argadd" Enter ":argadd $fx | tab all" Enter}}
 map u :{{
     clear
     unselect
 }}
-map w jump-startnexttype
 map W jump-startnexttype
+map w jump-startnextletter
 map x delete 
 map y
 map yy copy-all
