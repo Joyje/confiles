@@ -1,2 +1,8 @@
 #!/bin/bash
 set forcechafa
+preview csvkit .csv {{
+	csvlook "$f"
+}}
+preview tar .tar {{
+	tar -tvf "$f"
+}}

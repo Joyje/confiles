@@ -41,7 +41,7 @@ cmd copy-path ${{
     lf -remote "send $id toggle $spath"
     lf -remote "send $id copy"
 }}
-cmd move-path ${{
+cmd cut-path ${{
     printf "Select path: "
     read -e spath
     lf -remote "send $id toggle $spath"
@@ -203,14 +203,12 @@ map A newfile
 map a append
 map B jump-startprevioustype
 map b jump-startpreviousletter
-map c
 map c/
 map cc ${{tmux send-keys -t 0:0.1 "cd $PWD && ls" Enter}}
 map cl ${{tmux send-keys -t 0:0.2 Escape ":argd * | tabd | argadd" Enter ":argadd $fx | tab all" Enter}}
-map d
+map d/ cut-path
 map dd cut-all
 map dl cut
-map d/ move-path
 map E jump-endnexttype
 map e jump-endnextletter
 map G jump-bottomdir
@@ -232,7 +230,6 @@ map u :{{
 map W jump-startnexttype
 map w jump-startnextletter
 map x delete 
-map y
+map y/ copy-path
 map yy copy-all
 map yl copy
-map y/ copy-path
