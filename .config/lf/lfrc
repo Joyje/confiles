@@ -204,8 +204,11 @@ map a append
 map B jump-startprevioustype
 map b jump-startpreviousletter
 map c/
-map cc ${{tmux send-keys -t 0:0.1 "cd $PWD && ls" Enter}}
-map cl ${{tmux send-keys -t 0:0.2 Escape ":argd * | tabd | argadd" Enter ":argadd $fx | tab all" Enter}}
+map cc ${{tmux send-keys -t $USER:0.1 "cd $PWD && ls" Enter}}
+map cl ${{
+	tmux send-keys -t $USER:0.2 Escape \
+	":argd * | tabd | argadd" Enter ":argadd $fx | tab all" Enter
+}}
 map d/ cut-path
 map dd cut-all
 map dl cut
@@ -221,8 +224,11 @@ map I newfile
 map i prepend
 map O mkparentdir
 map o mksubdir
-map S ${{tmux send-keys -t 0:0.1 "cd $PWD && ls" Enter}}
-map s ${{tmux send-keys -t 0:0.2 Escape ":argd * | tabd | argadd" Enter ":argadd $fx | tab all" Enter}}
+map S ${{tmux send-keys -t $USER:0.1 "cd $PWD && ls" Enter}}
+map s ${{
+	tmux send-keys -t $USER:0.2 Escape \
+	":argd * | tabd | argadd" Enter ":argadd $fx | tab all" Enter
+}}
 map u :{{
     clear
     unselect

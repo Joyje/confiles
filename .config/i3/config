@@ -239,8 +239,9 @@ bar {
 }
 
 # Assign layouts and workspaces
+assign [class="Zutty"] $ws1
 assign [class="sensible-browser"] $ws2
 
 # Autostart programs in dedicated containers
-exec i3-sensible-terminal -e 'tmux'
-exec sensible-browser -e 'tmux'
+exec i3-sensible-terminal -e tmux new -As $USER
+exec sensible-browser
