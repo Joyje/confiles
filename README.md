@@ -14,6 +14,7 @@ The following packages needs to be installed:
 - git - Obviously, version control
 - Tmux - Terminal multiplexer
 - nvim - Neovim
+- rclone - Access cloud storage directly from the terminal
 - lf - Terminal filebrowser
 - ctpv - File previewer for lf
 - chafa - Render images directly in the terminal without running x/wayland
