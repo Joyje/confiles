@@ -1,8 +1,44 @@
 #!/bin/bash
 set forcechafa
+remove atool
+remove libreoffice
+
+# Sheets
 preview csvkit .csv {{
 	csvlook "$f"
 }}
+preview in2csv .xls .xlsx .dbf {{
+	in2csv -I "$f" | csvlook
+}}
+
+# Archives and Compression
+preview unzip .zip {{
+	unzip -l "$f"
+}}
 preview tar .tar {{
-	tar -tvf "$f"
+	tar -tavf "$f"
+}}
+preview gzip ."tar.gz" ."tar.tgz" ."tar.taz" {{
+	tar -tavf "$f"
+}}
+preview compress ."tar.Z" ."tar.taZ" {{
+	tar -tavf "$f"
+}}
+preview bzip2 ."tar.bz2" ."tar.tz2" ."tar.tbz2" ."tar.tbz" {{
+	tar -tavf "$f"
+}}
+preview lzip ."tar.lz" {{
+	tar -tavf "$f"
+}}
+preview lzma ."tar.lzma" ."tar.tlz" {{
+	tar -tavf "$f"
+}}
+preview lzop ."tar.lzo" {{
+	tar -tavf "$f"
+}}
+preview xz ."tar.xz" {{
+	tar -tavf "$f"
+}}
+preview zstd ."tar.zst" ."tar.tzst" {{
+	tar -tavf "$f"
 }}
