@@ -21,7 +21,6 @@ cmd on-cd &{{
 }}
 on-cd
 set shell bash
-set filesep " "
 set number 'true'
 set previewer ctpv
 set cleaner ctpvclear
@@ -89,6 +88,11 @@ cmd select-type %{{
 #| |  | | (_| |   <  __/ (_>  < |_| |  __/ |  __/ ||  __/
 #|_|  |_|\__,_|_|\_\___|\___/\/____/ \___|_|\___|\__\___|
 #
+cmd mktar %{{
+    printf "Name New Archive: "
+    read archivename
+    tar -caf $archivename -T <(echo "${fx[@]}")
+}}
 cmd mkparentdir %{{
     printf "Name New Parent Directory: "
     read latestdir
@@ -205,10 +209,11 @@ map B jump-startprevioustype
 map b jump-startpreviousletter
 map c
 map c/
-map cc ${{tmux send-keys -t $USER:0.1 "cd $PWD && ls" Enter}}
+map cc ${{tmux send-keys -t $USER:0.2 "cd $PWD && ls" Enter}}
 map cl ${{
-	tmux send-keys -t $USER:0.2 Escape \
-	":argd * | tabd | argadd" Enter ":argadd $fx | tab all" Enter
+        MYFILES=$(echo "${fx[@]}" | sed 's/ /\\ /g' | awk '{ORS=" "; print}')
+	tmux send-keys -t $USER:0.1 Escape \
+	":argd * | tabd | argadd" Enter ":argadd $MYFILES | tab all" Enter
 }}
 map d
 map d/ cut-path
@@ -224,12 +229,14 @@ map gT jump-previoussaveddir
 map gt jump-nextsaveddir
 map I newfile
 map i prepend
+map J mktar
 map O mkparentdir
 map o mksubdir
-map S ${{tmux send-keys -t $USER:0.1 "cd $PWD && ls" Enter}}
+map S ${{tmux send-keys -t $USER:0.2 "cd $PWD && ls" Enter}}
 map s ${{
-	tmux send-keys -t $USER:0.2 Escape \
-	":argd * | tabd | argadd" Enter ":argadd $fx | tab all" Enter
+        MYFILES=$(echo "${fx[@]}" | sed 's/ /\\ /g' | awk '{ORS=" "; print}')
+	tmux send-keys -t $USER:0.1 Escape \
+	":argd * | tabd | argadd" Enter ":argadd $MYFILES | tab all" Enter
 }}
 map u :{{
     clear
