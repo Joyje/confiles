@@ -209,7 +209,10 @@ map B jump-startprevioustype
 map b jump-startpreviousletter
 map c
 map c/
-map cc ${{tmux send-keys -t $USER:0.2 "cd $PWD && ls" Enter}}
+map cc ${{
+        MYPATH=$(echo "$PWD" | sed 's/ /\\ /g')
+	tmux send-keys -t $USER:0.2 "cd $MYPATH && ls" Enter
+}}
 map cl ${{
         MYFILES=$(echo "${fx[@]}" | sed 's/ /\\ /g' | awk '{ORS=" "; print}')
 	tmux send-keys -t $USER:0.1 Escape \
@@ -232,7 +235,10 @@ map i prepend
 map J mktar
 map O mkparentdir
 map o mksubdir
-map S ${{tmux send-keys -t $USER:0.2 "cd $PWD && ls" Enter}}
+map S ${{
+        MYPATH=$(echo "$PWD" | sed 's/ /\\ /g')
+	tmux send-keys -t $USER:0.2 "cd $MYPATH && ls" Enter
+}}
 map s ${{
         MYFILES=$(echo "${fx[@]}" | sed 's/ /\\ /g' | awk '{ORS=" "; print}')
 	tmux send-keys -t $USER:0.1 Escape \
