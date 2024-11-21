@@ -34,17 +34,17 @@ set cleaner ctpvclear
 #| |  | | (_) \ V /  __/ (_>  <___) |  __/ |  __/ (__| |_ 
 #|_|  |_|\___/ \_/ \___|\___/\/____/ \___|_|\___|\___|\__|
 #
-cmd copy-path ${{
-    printf "Select path: "
-    read -e spath
-    lf -remote "send $id toggle $spath"
-    lf -remote "send $id copy"
+cmd select-path ${{
+	printf "Select path: "
+	read -e spath
+	if [ -e "$spath" ];then
+		lf -remote "send $id :toggle \"$spath\"; $1"
+	else
+		echo "Ingen giltig sökväg"
+	fi
 }}
-cmd cut-path ${{
-    printf "Select path: "
-    read -e spath
-    lf -remote "send $id toggle $spath"
-    lf -remote "send $id cut"
+cmd select-all ${{
+	lf -remote "send $id :unselect; invert; $1"
 }}
 cmd cut-all %{{
     if [ "$lf_hidden" = "false" ]; then
@@ -94,19 +94,20 @@ cmd mktar %{{
     tar -caf $archivename -T <(echo "${fx[@]}")
 }}
 cmd mkparentdir %{{
-    printf "Name New Parent Directory: "
-    read latestdir
-    if [ $lf_count -gt 1 ]; then
-        for dir in ${latestdir}; do
-            mkdir -p $(seq -f "../${dir}%g" ${lf_count})
-        done
-    else
-        mkdir -p ../${latestdir}
-    fi
-    #lf -remote "send $id cd ../${latestdir}"
+	printf "Name New Parent Directories: "
+	read latestdir
+	currentdir="$PWD"
+	cd ..
+	for dir in ${latestdir[@]}; do
+		mkdir -p "$dir"
+		cd "$dir"
+	done
+	mv "$currentdir" "$PWD"
+	newdir="$PWD/$(echo $currentdir | awk -F/ '{print $NF}')"
+	lf -remote "send $id cd \"$newdir\""
 }}
 cmd mksubdir %{{
-    printf "Name New Subdirectory: "
+    printf "Name New Subdirectories: "
     read latestdir
     if [ $lf_count -gt 1 ]; then
         for dir in ${latestdir}; do
@@ -115,7 +116,6 @@ cmd mksubdir %{{
     else
         mkdir -p ${latestdir}
     fi
-    #lf -remote "send $id cd ${latestdir}"
 }}
 cmd newfile %{{
     printf "Name new file(s): "
@@ -219,7 +219,7 @@ map cl ${{
 	":argd * | tabd | argadd" Enter ":argadd $MYFILES | tab all" Enter
 }}
 map d
-map d/ cut-path
+map d/ select-path cut
 map dd cut-all
 map dl cut
 map E jump-endnexttype
@@ -252,6 +252,6 @@ map W jump-startnexttype
 map w jump-startnextletter
 map x delete 
 map y
-map y/ copy-path
+map y/ select-path copy
 map yy copy-all
 map yl copy
