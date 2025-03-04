@@ -23,6 +23,8 @@ The following packages needs to be installed:
 - pdftk - pdf manager
 - pdfgrep - Ability to search contents of pdf files
 - tar - Archive manager, comes preinstalled with most distros
+- unzip - zip manager
+- p7zip - 7z manager
 
 Most (if not all) of these should be available through your distros standard repos.
 Also, you need a few plugins for Tmux:

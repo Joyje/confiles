@@ -15,6 +15,9 @@ preview in2csv .xls .xlsx .dbf {{
 preview unzip .zip {{
 	unzip -l "$f"
 }}
+preview lzma2 ."7z" {{
+	7zr l -ba "$f"
+}}
 preview tar .tar {{
 	tar -tavf "$f"
 }}
