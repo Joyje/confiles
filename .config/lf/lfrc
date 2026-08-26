@@ -211,11 +211,12 @@ map c
 map c/
 map cc ${{
         MYPATH=$(echo "$PWD" | sed 's/ /\\ /g')
-	tmux send-keys -t $USER:0.2 "cd $MYPATH && ls" Enter
+	tmux send-keys -t :.2 C-e C-u "cd $MYPATH && ls" Enter
+	tmux select-pane -t :.2 \; resize-pane -t :.2 -x 120 -y 45
 }}
 map cl ${{
         MYFILES=$(echo "${fx[@]}" | sed 's/ /\\ /g' | awk '{ORS=" "; print}')
-	tmux send-keys -t $USER:0.1 Escape \
+	tmux send-keys -t :.1 Escape \
 	":argd * | tabd | argadd" Enter ":argadd $MYFILES | tab all" Enter
 }}
 map d
@@ -237,11 +238,12 @@ map O mkparentdir
 map o mksubdir
 map S ${{
         MYPATH=$(echo "$PWD" | sed 's/ /\\ /g')
-	tmux send-keys -t $USER:0.2 "cd $MYPATH && ls" Enter
+	tmux send-keys -t :.2 C-e C-u "cd $MYPATH && ls" Enter
+	tmux select-pane -t :.2 \; resize-pane -t :.2 -x 120 -y 45
 }}
 map s ${{
         MYFILES=$(echo "${fx[@]}" | sed 's/ /\\ /g' | awk '{ORS=" "; print}')
-	tmux send-keys -t $USER:0.1 Escape \
+	tmux send-keys -t :.1 Escape \
 	":argd * | tabd | argadd" Enter ":argadd $MYFILES | tab all" Enter
 }}
 map u :{{
