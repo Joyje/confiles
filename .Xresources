@@ -6,7 +6,7 @@
 *.cursorColor: #afbfbf
 
 ! Menu text
-*.color0: #76b3b0
+*.color0: #0b5263
 ! Black
 *.color8: #4a697d
 
@@ -37,7 +37,7 @@
 *.color14: #33c5ba
 
 ! Unselected bar menu entries
-*.color7: #0b5263
+*.color7: #76b3b0
 ! White
 *.color15: #fdf6e3
 

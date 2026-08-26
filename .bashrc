@@ -21,3 +21,13 @@ alias pdfadd='_pdfadd() { gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile
 
 # Xorg Program specific aliases
 alias brave-browser='brave-browser --allow-file-access-from-files'
+
+# Unsloth download fix
+export UNSLOTH_STABLE_DOWNLOADS=1
+
+# Hermes Agent — ensure ~/.local/bin is on PATH
+export PATH="$HOME/.local/bin:$PATH"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
